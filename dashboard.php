@@ -444,37 +444,57 @@ if (!isset($_SESSION['user_id'])) {
     }
 
     function buildArrayForm(sectionName, container) {
-      let items = CVdata[sectionName] || [];
-
-      items.forEach((item, index) => {
-        renderArrayItem(sectionName, container, item, index);
-      });
-
-      // "Add new" button
-      let addBtn = document.createElement("button");
-      addBtn.className = "add-button";
-      addBtn.textContent = "➕";
-      addBtn.onclick = () => {
-        // Basic approach: shape depends on which array it is
-        let newItem = {};
-        if (sectionName === "habilidades" || sectionName === "idiomas" || sectionName === "certificaciones") {
-          newItem = { nombre: "", nivel: 1 };
-        } else if (sectionName === "redes_sociales") {
-          newItem = { nombre: "", url: "", icono: "" };
-        } else if (sectionName === "experiencia_profesional") {
-          newItem = { puesto: "", empresa: "", logo: "", fecha: "", descripcion: "" };
-        } else if (sectionName === "formacion") {
-          newItem = { titulo: "", institucion: "", logo: "", fecha: "", descripcion: "" };
-        } else if (sectionName === "publicaciones") {
-          newItem = { titulo: "", fecha: "", descripcion: "" };
-        }
-
-        items.push(newItem);
-        saveData();
-        showFormFor(sectionName); // re-render
-      };
-      container.appendChild(addBtn);
+  // If the section does not exist or is empty, initialize it with one default element.
+  if (!CVdata[sectionName] || CVdata[sectionName].length === 0) {
+    let defaultItem = {};
+    if (sectionName === "habilidades" || sectionName === "idiomas" || sectionName === "certificaciones") {
+      defaultItem = { nombre: "", nivel: 1 };
+    } else if (sectionName === "redes_sociales") {
+      defaultItem = { nombre: "", url: "", icono: "" };
+    } else if (sectionName === "experiencia_profesional") {
+      defaultItem = { puesto: "", empresa: "", logo: "", fecha: "", descripcion: "" };
+    } else if (sectionName === "formacion") {
+      defaultItem = { titulo: "", institucion: "", logo: "", fecha: "", descripcion: "" };
+    } else if (sectionName === "publicaciones") {
+      defaultItem = { titulo: "", fecha: "", descripcion: "" };
     }
+    CVdata[sectionName] = [ defaultItem ];
+  }
+
+  // Get the array from CVdata now that it is guaranteed to exist.
+  let items = CVdata[sectionName];
+  // Clear previous form content
+  container.innerHTML = "";
+
+  // Render each item.
+  items.forEach((item, index) => {
+    renderArrayItem(sectionName, container, item, index);
+  });
+
+  // "Add new" button to allow adding more items.
+  let addBtn = document.createElement("button");
+  addBtn.className = "add-button";
+  addBtn.textContent = "➕";
+  addBtn.onclick = () => {
+    let newItem = {};
+    if (sectionName === "habilidades" || sectionName === "idiomas" || sectionName === "certificaciones") {
+      newItem = { nombre: "", nivel: 1 };
+    } else if (sectionName === "redes_sociales") {
+      newItem = { nombre: "", url: "", icono: "" };
+    } else if (sectionName === "experiencia_profesional") {
+      newItem = { puesto: "", empresa: "", logo: "", fecha: "", descripcion: "" };
+    } else if (sectionName === "formacion") {
+      newItem = { titulo: "", institucion: "", logo: "", fecha: "", descripcion: "" };
+    } else if (sectionName === "publicaciones") {
+      newItem = { titulo: "", fecha: "", descripcion: "" };
+    }
+    CVdata[sectionName].push(newItem);
+    saveData();
+    showFormFor(sectionName); // Re-render the form after adding a new element.
+  };
+  container.appendChild(addBtn);
+}
+
 
     function renderArrayItem(sectionName, container, item, index) {
       let wrapper = document.createElement("div");
