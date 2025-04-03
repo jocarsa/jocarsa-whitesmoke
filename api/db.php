@@ -2,7 +2,7 @@
 // api/db.php
 // Opens (or creates) the SQLite database via PDO.
 
-$dsn = 'sqlite:' . __DIR__ . '/../database.db';
+$dsn = 'sqlite:../../databases/whitesmoke.db';
 try {
     $pdo = new PDO($dsn);
     // Enable foreign keys

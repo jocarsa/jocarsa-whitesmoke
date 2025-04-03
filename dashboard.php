@@ -520,42 +520,72 @@ if (!isset($_SESSION['user_id'])) {
 
 
     function renderArrayItem(sectionName, container, item, index) {
-      let wrapper = document.createElement("div");
-      wrapper.className = "array-item";
+  let wrapper = document.createElement("div");
+  wrapper.className = "array-item";
 
-      Object.keys(item).forEach(key => {
-        let formGroup = document.createElement("div");
-        formGroup.className = "form-group";
+  // Render input fields for each property in the item
+  Object.keys(item).forEach(key => {
+    let formGroup = document.createElement("div");
+    formGroup.className = "form-group";
 
-        let labelEl = document.createElement("label");
-        labelEl.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-        formGroup.appendChild(labelEl);
+    let labelEl = document.createElement("label");
+    labelEl.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+    formGroup.appendChild(labelEl);
 
-        let inputEl = document.createElement("input");
-        inputEl.type = "text";
-        inputEl.value = item[key] || "";
-        inputEl.onchange = () => {
-          CVdata[sectionName][index][key] = inputEl.value;
-          saveData();
-        };
-        formGroup.appendChild(inputEl);
+    let inputEl = document.createElement("input");
+    inputEl.type = "text";
+    inputEl.value = item[key] || "";
+    inputEl.onchange = () => {
+      CVdata[sectionName][index][key] = inputEl.value;
+      saveData();
+    };
+    formGroup.appendChild(inputEl);
 
-        wrapper.appendChild(formGroup);
-      });
+    wrapper.appendChild(formGroup);
+  });
 
-      // Delete button
-      let delBtn = document.createElement("button");
-      delBtn.className = "delete-item";
-      delBtn.textContent = "❌";
-      delBtn.onclick = () => {
-        CVdata[sectionName].splice(index, 1);
-        saveData();
-        showFormFor(sectionName);
-      };
-      wrapper.appendChild(delBtn);
-
-      container.appendChild(wrapper);
+  // Move Up button
+  let upBtn = document.createElement("button");
+  upBtn.className = "move-up";
+  upBtn.textContent = "↑";
+  upBtn.onclick = () => {
+    if (index > 0) {
+      // Swap the current item with the one above it
+      [CVdata[sectionName][index - 1], CVdata[sectionName][index]] = [CVdata[sectionName][index], CVdata[sectionName][index - 1]];
+      saveData();
+      showFormFor(sectionName);
     }
+  };
+  wrapper.appendChild(upBtn);
+
+  // Move Down button
+  let downBtn = document.createElement("button");
+  downBtn.className = "move-down";
+  downBtn.textContent = "↓";
+  downBtn.onclick = () => {
+    if (index < CVdata[sectionName].length - 1) {
+      // Swap the current item with the one below it
+      [CVdata[sectionName][index + 1], CVdata[sectionName][index]] = [CVdata[sectionName][index], CVdata[sectionName][index + 1]];
+      saveData();
+      showFormFor(sectionName);
+    }
+  };
+  wrapper.appendChild(downBtn);
+
+  // Delete button (already implemented)
+  let delBtn = document.createElement("button");
+  delBtn.className = "delete-item";
+  delBtn.textContent = "❌";
+  delBtn.onclick = () => {
+    CVdata[sectionName].splice(index, 1);
+    saveData();
+    showFormFor(sectionName);
+  };
+  wrapper.appendChild(delBtn);
+
+  container.appendChild(wrapper);
+}
+
 
     // 4. Save data to the server (api/save.php)
     function saveData() {
