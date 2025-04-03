@@ -17,35 +17,26 @@ if (!isset($_SESSION['user_id'])) {
        ------------------------------------------- */
     @import url('https://static.jocarsa.com/fuentes/ubuntu-font-family-0.83/ubuntu.css');
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Ubuntu, sans-serif;
-      height: 100%;
-      transition: all 1s;
-      background: DarkSlateGray;
-      color: white;
-    }
-
+   html, body {
+  height: 100vh; /* Full viewport height */
+  margin: 0;
+  padding: 0;
+}
     body {
-      display: flex;
-      flex-direction: column;
-    }
+  display: flex;
+  flex-direction: column;
+}
+
 
     header, footer {
-      padding: 10px;
-      flex: 0 0 auto;
-    }
+  flex: 0 0 auto;
+}
 
     main {
-      /* We want 3 columns in a row: nav | form panel | iframe preview */
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: stretch;
-    }
-
+  flex: 1 1 auto;      /* Fill the remaining space between header and footer */
+  display: flex;
+  overflow: hidden;    /* Hide overflow so child panels can scroll internally */
+}
     /* -------------------------------------------
        Header
        ------------------------------------------- */
@@ -54,6 +45,7 @@ if (!isset($_SESSION['user_id'])) {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      background:darkslategray;
     }
 
     header h1 {
@@ -109,13 +101,12 @@ if (!isset($_SESSION['user_id'])) {
 
     /* Left nav */
     main nav {
-      width: 200px;
-      background: DarkSlateGray;
-      color: white;
-      padding: 10px;
-      transition: all 0.5s;
-      overflow-y: auto;
-    }
+  width: 200px;
+  background: DarkSlateGray;
+  color: white;
+  padding: 10px;
+  overflow-y: auto;
+}
 
     main nav .enlaces > div {
       padding: 10px;
@@ -146,26 +137,28 @@ if (!isset($_SESSION['user_id'])) {
     }
 
     /* Center panel for forms */
-    #form-panel {
-      flex: 1;
-      background: white;
-      color: black;
-      border-radius: 10px;
-      padding: 20px;
-      overflow-y: auto;
-      position: relative;
-      z-index: 1;
-    }
+/* Center panel for forms */
+#form-panel {
+  flex: 1;                   /* Take available horizontal space */
+  background: white;
+  color: black;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;          /* Enable vertical scrolling */
+  position: relative;
+  z-index: 1;
+}
 
-    /* Right side: iframe preview */
-    #preview-panel {
-      width: 350px;
-      min-width: 950px;
-      background: #ddd;
-      margin-left: 10px;
-      position: relative;
-      z-index: 1;
-    }
+/* Right side: iframe preview */
+#preview-panel {
+  width: 950px;
+  background: #ddd;
+  margin-left: 10px;
+  overflow-y: auto;          /* Enable vertical scrolling */
+  position: relative;
+  z-index: 1;
+  /* Note: Removed min-width to better fit the layout */
+}
 
     #preview-panel iframe {
       width: 100%;
