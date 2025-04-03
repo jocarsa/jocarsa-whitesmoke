@@ -21,6 +21,7 @@ if (!isset($_SESSION['user_id'])) {
   height: 100vh; /* Full viewport height */
   margin: 0;
   padding: 0;
+  font-family:Ubuntu,sans-serif
 }
     body {
   display: flex;
@@ -147,6 +148,7 @@ if (!isset($_SESSION['user_id'])) {
   overflow-y: auto;          /* Enable vertical scrolling */
   position: relative;
   z-index: 1;
+  border-right: 1px solid lightgrey;
 }
 
 /* Right side: iframe preview */
