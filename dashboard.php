@@ -232,6 +232,20 @@ if (!isset($_SESSION['user_id'])) {
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+    @media print {
+  body * {
+    visibility: hidden;
+  }
+  #preview-panel, #preview-panel * {
+    visibility: visible;
+  }
+  #preview-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
   </style>
 </head>
 <body>
@@ -293,6 +307,15 @@ if (!isset($_SESSION['user_id'])) {
         <div data-section="experiencia_profesional"><span class="icono">E</span><span>Experiencia</span></div>
         <div data-section="formacion"><span class="icono">F</span><span>Formación</span></div>
         <div data-section="publicaciones"><span class="icono">P</span><span>Publicaciones</span></div>
+      	<div id="print-action" style="cursor:pointer; padding:10px; border-radius:5px; background: rgba(255,255,255,0.1); margin-top:10px;">
+      <span class="icono">🖨️</span><span>Imprimir</span>
+      <script>
+      	document.getElementById("print-action").addEventListener("click", function() {
+			  // This will trigger the print dialog for the content inside the iframe
+			  document.getElementById("preview").contentWindow.print();
+			});
+      </script>
+    </div>
       </div>
     </nav>
 
