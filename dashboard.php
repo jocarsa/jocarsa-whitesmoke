@@ -207,6 +207,7 @@ if (!isset($_SESSION['user_id'])) {
       border-radius: 4px;
       box-shadow:0px 2px 0px red;
       border:1px solid red;
+      margin:5px;
     }
     .add-button {
       background: white;
@@ -217,6 +218,18 @@ if (!isset($_SESSION['user_id'])) {
       cursor: pointer;
       margin-top: 10px;
       border-radius: 4px;
+      margin:5px;
+    }
+    .move-up,.move-down {
+      background: white;
+      border:1px solid orange;
+      box-shadow:0px 2px 0px orange;
+      color: orange;
+      padding: 6px 12px;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 4px;
+      margin:5px;
     }
     button{
       width:50px;
@@ -547,7 +560,7 @@ if (!isset($_SESSION['user_id'])) {
   // Move Up button
   let upBtn = document.createElement("button");
   upBtn.className = "move-up";
-  upBtn.textContent = "↑";
+  upBtn.textContent = "⬆";
   upBtn.onclick = () => {
     if (index > 0) {
       // Swap the current item with the one above it
@@ -561,7 +574,7 @@ if (!isset($_SESSION['user_id'])) {
   // Move Down button
   let downBtn = document.createElement("button");
   downBtn.className = "move-down";
-  downBtn.textContent = "↓";
+  downBtn.textContent = "⬇";
   downBtn.onclick = () => {
     if (index < CVdata[sectionName].length - 1) {
       // Swap the current item with the one below it
