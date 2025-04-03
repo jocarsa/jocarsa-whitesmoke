@@ -536,7 +536,6 @@ if (!isset($_SESSION['user_id'])) {
   let wrapper = document.createElement("div");
   wrapper.className = "array-item";
 
-  // Render input fields for each property in the item
   Object.keys(item).forEach(key => {
     let formGroup = document.createElement("div");
     formGroup.className = "form-group";
@@ -545,14 +544,47 @@ if (!isset($_SESSION['user_id'])) {
     labelEl.textContent = key.charAt(0).toUpperCase() + key.slice(1);
     formGroup.appendChild(labelEl);
 
-    let inputEl = document.createElement("input");
-    inputEl.type = "text";
-    inputEl.value = item[key] || "";
-    inputEl.onchange = () => {
-      CVdata[sectionName][index][key] = inputEl.value;
-      saveData();
-    };
-    formGroup.appendChild(inputEl);
+    // For work experience and education, use file input for "logo"
+    if ((sectionName === "experiencia_profesional" || sectionName === "formacion") && key === "logo") {
+      // Create an image preview if one exists
+      let previewImg = document.createElement("img");
+      previewImg.style.maxWidth = "100px";
+      previewImg.style.display = "block";
+      previewImg.style.marginBottom = "10px";
+      if (item[key]) {
+        previewImg.src = item[key];
+      }
+      formGroup.appendChild(previewImg);
+
+      // Create file input for uploading new image
+      let inputEl = document.createElement("input");
+      inputEl.type = "file";
+      inputEl.accept = "image/*";
+      inputEl.onchange = (e) => {
+        let file = e.target.files[0];
+        if (!file) return;
+        let reader = new FileReader();
+        reader.onload = function(evt) {
+          // Save the base64 image in the CVdata array
+          CVdata[sectionName][index][key] = evt.target.result;
+          saveData();
+          // Update the preview
+          previewImg.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      };
+      formGroup.appendChild(inputEl);
+    } else {
+      // Default: use text input for other fields
+      let inputEl = document.createElement("input");
+      inputEl.type = "text";
+      inputEl.value = item[key] || "";
+      inputEl.onchange = () => {
+        CVdata[sectionName][index][key] = inputEl.value;
+        saveData();
+      };
+      formGroup.appendChild(inputEl);
+    }
 
     wrapper.appendChild(formGroup);
   });
@@ -563,7 +595,6 @@ if (!isset($_SESSION['user_id'])) {
   upBtn.textContent = "⬆";
   upBtn.onclick = () => {
     if (index > 0) {
-      // Swap the current item with the one above it
       [CVdata[sectionName][index - 1], CVdata[sectionName][index]] = [CVdata[sectionName][index], CVdata[sectionName][index - 1]];
       saveData();
       showFormFor(sectionName);
@@ -577,7 +608,6 @@ if (!isset($_SESSION['user_id'])) {
   downBtn.textContent = "⬇";
   downBtn.onclick = () => {
     if (index < CVdata[sectionName].length - 1) {
-      // Swap the current item with the one below it
       [CVdata[sectionName][index + 1], CVdata[sectionName][index]] = [CVdata[sectionName][index], CVdata[sectionName][index + 1]];
       saveData();
       showFormFor(sectionName);
@@ -585,7 +615,7 @@ if (!isset($_SESSION['user_id'])) {
   };
   wrapper.appendChild(downBtn);
 
-  // Delete button (already implemented)
+  // Delete button
   let delBtn = document.createElement("button");
   delBtn.className = "delete-item";
   delBtn.textContent = "❌";
@@ -598,6 +628,7 @@ if (!isset($_SESSION['user_id'])) {
 
   container.appendChild(wrapper);
 }
+
 
 
     // 4. Save data to the server (api/save.php)
