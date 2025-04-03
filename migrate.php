@@ -3,7 +3,7 @@
 // Run this once to set up the database with an initial user.
 
 session_start();
-require_once __DIR__ . '/api/db.php';
+require_once 'db.php';
 
 // 1) Create users table if not exists
 $createSQL = "CREATE TABLE IF NOT EXISTS users (

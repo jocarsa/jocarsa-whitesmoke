@@ -1,7 +1,7 @@
 <?php
 // login.php
 session_start();
-require_once 'api/db.php';
+require_once 'db.php';
 
 $error = "";
 

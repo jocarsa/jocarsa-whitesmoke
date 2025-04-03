@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     echo "No estás autenticado.";
     exit;
 }
-require_once 'api/db.php';
+require_once 'db.php';
 
 // Fetch user data from DB
 $user_id = $_SESSION['user_id'];
